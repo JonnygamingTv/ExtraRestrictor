@@ -9,6 +9,8 @@ using UnityEngine;
 using Rocket.API.Collections;
 using Rocket.API;
 using System.Collections;
+using Logger = Rocket.Core.Logging.Logger;
+using System;
 
 namespace ExtraConcentratedJuice.ExtraRestrictor
 {
@@ -22,6 +24,15 @@ namespace ExtraConcentratedJuice.ExtraRestrictor
 
             UnturnedPlayerEvents.OnPlayerInventoryAdded += OnInventoryUpdated;
             UnturnedPlayerEvents.OnPlayerWear += OnWear;
+
+            Logger.Log("ExtraRestrictor Loaded!");
+            Logger.Log("Reminder that the global bypass permission is extrarestrictor.bypass");
+            Logger.Log($"Ignore admins: {Configuration.Instance.IgnoreAdmins}");
+            Logger.Log("==============");
+            Logger.Log("Restricted items:");
+            Logger.Log(String.Join("\n", Configuration.Instance.Restricted
+                .Select(x => $"ID: {x.Id} | Name: {Assets.find(EAssetType.ITEM, x.Id).name} | Bypass: {(x.Bypass ?? "None")}").ToArray()));
+            Logger.Log("==============");
         }
 
         protected override void Unload()

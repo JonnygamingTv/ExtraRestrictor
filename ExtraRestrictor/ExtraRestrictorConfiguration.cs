@@ -19,7 +19,7 @@ namespace ExtraConcentratedJuice.ExtraRestrictor
             Restricted = new List<RestrictedItem>
             {
                 new RestrictedItem { Bypass = "bypass.explosives", Id = 519 },
-                new RestrictedItem { Id = 1441  }
+                new RestrictedItem { Id = 1441 }
             };
             IgnoreAdmins = true;
         }
