@@ -31,7 +31,7 @@ namespace ExtraConcentratedJuice.ExtraRestrictor
             Logger.Log("==============");
             Logger.Log("Restricted items:");
             Logger.Log(String.Join("\n", Configuration.Instance.Restricted
-                .Select(x => $"ID: {x.Id} | Name: {Assets.find(EAssetType.ITEM, x.Id).name} | Bypass: {(x.Bypass ?? "None")}").ToArray()));
+                .Select(x => $"ID: {x.Id} | Name: {Assets.find(EAssetType.ITEM, x.Id)?.name ?? "> INVALID ID <"} | Bypass: {(x.Bypass ?? "None")}").ToArray()));
             Logger.Log("==============");
         }
 
