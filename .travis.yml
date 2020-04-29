@@ -1,0 +1,13 @@
+language: csharp
+solution: ExtraRestrictor.sln
+deploy:
+  provider: releases
+  edge: true
+  api_key:
+    secure: P6YP9SFyQOdgSW9ZU4OmvmGNCJHmu6ybqtoc5f/4KiuiQwrOHALM86WL2Oz0JxORlx/VtY9f9Nd6llmAmIOlv6rCkDUKof2zyXiqW+Ls8w1zosNbK96etn5EtGskSAQD+ZffuxE1sEhNyT/v1M0oeSDesmXiXr7LcQjvwUYNpFLKlzFdnlg6DddNMOHztBT3394DB3tJndP6D6rmHsJJDWWBooyT2cqsO0clV8oE9ludkAmZ1khktaAyMBklxazh6OVboHzlxfBJ11XFpguMCVzjcbIYIQV7SZSpxnu1IwQlOnVnHVhT94zkWqMNaNTI7mh/zHdYAICIn8y7d0xaauCIo2ZqcqUHCHG/c2W7kNySVQ3Pu3AajeA9MNVNk1opV1S7RVl/gVLKrYlEvUqaSG1bCec4976dNu/NnPCV48YhTrx1XoY/aWAWTtusIj8PzccN0pI9U24T3qZB7O3uqKAcLDkD2l6Hdy2DVuxdkjwrugXVIuaCJItPphWQXDaUrhLe+Vfdgq5ivxaudUqTtWPEO/Sl7H53kEtVkD3ChQNyvaGa+CLoHOrW8kuG3nE3GtcWX4zDEowDMUaeYqxafgtyUuVydF86yqi+AHJlQQva/tKuxBmB+/vTeRQVCqR3UAaNl8Fet6mowTtdZfgJSO7OKSKKkZYfo1L5vEntUK4=
+  file: 'bin/Release/ExtraRestrictor.dll'
+  on:
+    tags: true
+  skip_cleanup: true
+  release_notes: 'This is an automated build of the plugin from Travis-CI.\nRefer to https://iceplugins.xyz/ExtraRestrictor/ for documentation.'
+  draft: false

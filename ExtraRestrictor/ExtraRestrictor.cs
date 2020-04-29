@@ -16,22 +16,25 @@ namespace ExtraConcentratedJuice.ExtraRestrictor
 {
     public class ExtraRestrictor : RocketPlugin<ExtraRestrictorConfiguration>
     {
-        public static ExtraRestrictor instance;
+        public static ExtraRestrictor Instance { get; private set; }
 
         protected override void Load()
         {
-            instance = this;
+            Instance = this;
 
             UnturnedPlayerEvents.OnPlayerInventoryAdded += OnInventoryUpdated;
             UnturnedPlayerEvents.OnPlayerWear += OnWear;
 
             Logger.Log("ExtraRestrictor Loaded!");
-            Logger.Log("Reminder that the global bypass permission is extrarestrictor.bypass");
+            Logger.Log("Users with the permission extrarestrictor.bypass will bypass restrictions.");
             Logger.Log($"Ignore admins: {Configuration.Instance.IgnoreAdmins}");
             Logger.Log("==============");
             Logger.Log("Restricted items:");
-            Logger.Log(String.Join("\n", Configuration.Instance.Restricted
-                .Select(x => $"ID: {x.Id} | Name: {Assets.find(EAssetType.ITEM, x.Id)?.name ?? "> INVALID ID <"} | Bypass: {(x.Bypass ?? "None")}").ToArray()));
+
+            foreach (var item in Configuration.Instance.Restricted
+                .Select(x => $"ID: {x.Id} | Name: {Assets.find(EAssetType.ITEM, x.Id)?.name ?? "> INVALID ID <"} | Bypass: {(x.Bypass ?? "None")}"))
+                Logger.Log(item);
+
             Logger.Log("==============");
         }
 
@@ -64,46 +67,46 @@ namespace ExtraConcentratedJuice.ExtraRestrictor
 
             if (item != null && !player.GetPermissions().Any(x => x.Name == item.Bypass))
             {
-                // Doesn't remove an item without delayed invocation oof
+                // Gotta wait until the next frame for the item to be removed
                 switch (wear)
                 {
                     #region WearSwitch
                     case UnturnedPlayerEvents.Wearables.Backpack:
-                        StartCoroutine(DelayedInvoke(0.1F, () =>
+                        StartCoroutine(InvokeOnNextFrame(() =>
                         player.Player.clothing.askWearBackpack(0, 0, new byte[0], true)));
                         break;
                     case UnturnedPlayerEvents.Wearables.Glasses:
-                        StartCoroutine(DelayedInvoke(0.1F, () =>
+                        StartCoroutine(InvokeOnNextFrame(() =>
                         player.Player.clothing.askWearGlasses(0, 0, new byte[0], true)));
                         break;
                     case UnturnedPlayerEvents.Wearables.Hat:
-                        StartCoroutine(DelayedInvoke(0.1F, () =>
+                        StartCoroutine(InvokeOnNextFrame(() =>
                         player.Player.clothing.askWearHat(0, 0, new byte[0], true)));
                         break;
                     case UnturnedPlayerEvents.Wearables.Mask:
-                        StartCoroutine(DelayedInvoke(0.1F, () =>
+                        StartCoroutine(InvokeOnNextFrame(() =>
                         player.Player.clothing.askWearMask(0, 0, new byte[0], true)));
                         break;
                     case UnturnedPlayerEvents.Wearables.Pants:
-                        StartCoroutine(DelayedInvoke(0.1F, () =>
+                        StartCoroutine(InvokeOnNextFrame(() =>
                         player.Player.clothing.askWearPants(0, 0, new byte[0], true)));
                         break;
                     case UnturnedPlayerEvents.Wearables.Shirt:
-                        StartCoroutine(DelayedInvoke(0.1F, () =>
+                        StartCoroutine(InvokeOnNextFrame(() =>
                         player.Player.clothing.askWearShirt(0, 0, new byte[0], true)));
                         break;
                     case UnturnedPlayerEvents.Wearables.Vest:
-                        StartCoroutine(DelayedInvoke(0.1F, () =>
+                        StartCoroutine(InvokeOnNextFrame(() =>
                         player.Player.clothing.askWearVest(0, 0, new byte[0], true)));
                         break;
-                        #endregion
+                    #endregion
                 }
             }
         }
 
-        private IEnumerator DelayedInvoke(float time, System.Action action)
+        private IEnumerator InvokeOnNextFrame(System.Action action)
         {
-            yield return new WaitForSeconds(time);
+            yield return new WaitForFixedUpdate();
             action();
         }
 

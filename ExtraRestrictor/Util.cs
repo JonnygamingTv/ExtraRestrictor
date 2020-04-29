@@ -8,6 +8,6 @@ namespace ExtraConcentratedJuice.ExtraRestrictor
     public static class Util
     {
         public static string Translate(string TranslationKey, params object[] Placeholders) =>
-            ExtraRestrictor.instance.Translations.Instance.Translate(TranslationKey, Placeholders);
+            ExtraRestrictor.Instance.Translations.Instance.Translate(TranslationKey, Placeholders);
     }
 }
