@@ -8,7 +8,7 @@ deploy:
   draft: false
   api_key:
     secure: Vm7ChQT2uvsJDBOz7QojlSNArLo332GvtWPEKvJRb6fS2URXPZ7KVEX/cYUjqmjXwiwoBswfzANTkQFGXwEOt8B1KL4ztOc708w1uhi9+5bENXnPTRuF+Y9nR0MxFfrYO+HG+G5d7nyZcogGnMcIE/0LhJvvnsxRoOb18ge73ZQBQoESasAfTnYFmfvRCtnheJoFyE6xD7iFU4Kh9hoHb6vhyYd2aP8KpLh5dKZczRZ/fdQclf0fzHVbERH5HYXN8afzgoreBGOtT3AN75hrGe6W42VXNB5gbHmMAdbhWbWjIv+8uVocUG6Zh6jZJRp8DxcjKTnZV+5h1sa0cbtBNkyn/6jQhDqa4m9qrH4FVRIikPp2jyLDKUxKC423l6G+TYXlm6ppT6OtKId1uqDpT8ebV3YEMlrLUJjc2sELGM0L5R1bAkCRLdZd5byCDVE9qTE/HrW5r+KCiq69nCrCAM505HejugDKeAYFFdiv2iMBqVZGweSrzkg7YfAd3AIt2XLpSOL+IaLyfM/NPs0vmLYZIW75oNzsjWeebk7yqh0ZQ/sHGY+Ur0pLibyRto+ix+d7v0byHHjwziNP3IfjWFbKuiLjAvZcXyUXGmELgSrR8lLmeEpo670jqhyLhos9NGjyJSxc3AzOvQ1toO45YUHT7BQYKdZPFg3+dDXXpWY=
-  file: ''
+  file: 'ExtraRestrictor/bin/Release/ExtraRestrictor.dll'
   on:
     tags: true
   skip_cleanup: true
