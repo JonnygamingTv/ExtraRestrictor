@@ -3,12 +3,12 @@ solution: ExtraRestrictor.sln
 deploy:
   provider: releases
   edge: true
-  file: bin/Release/ExtraRestrictor.dll
-  on:
-    tags: true
-  skip_cleanup: true
   release_notes: This is an automated build of the plugin from Travis-CI.\nRefer to
     https://iceplugins.xyz/ExtraRestrictor/ for documentation.
   draft: false
   api_key:
-    secure: sDHcrbEOg7GpnDP6nrgdWKVQsVXqj9jhScCp3pKq2F3nsdWJi6/DfQqwSKnu6pb4H/cQ8Tl5PzFIqROgxvzuwJydi3Pt1gooP4Rd+zbwABBg1LPxvz1I/x1J2OeiTG+BFWkNmXth8gk7NmXBWib59iKpONP9I45sEuRokFhZ3rCdyIf17pF0B09eQPPHj+b8Fs1e2hbTmLHR2vU5xVDikyGHEKNDXJSY4Hlq50Y79uvwbNYfih2eQmZ+0T+0p3Mhc7DCiUheBuGUF/0OYGgP/L56ht2uflmSIMjKfC2A+FaI5AULdo4uieBIbQD5QC254mHTM8tBezh46FCs/HATueIIclr1dJT3IVmZfSz9MaF2XGC9t/0d3+OMSEmVLtYTDr3JZKgz0eBdMW3+Er7ax9eC5ee7qMQPuLcIm+vcWffGMyOBau2/4L5GW/gxdopGoYfsb+nRKHurgG3Ro2K8NgchBPgPvcdCtTCSHw5b/vI93xKglZAX9FS0zqvm7+pWfZyaOm8z53bb0xMk0Emi+fhuGSnwhsJ0Xwc8B/rMN+Y85Ek8X7fjjg4a1FaMH36eJ0ANh/Ge7nN1Dvs8rl2S+5arkv+VYjBiX0Js46N4JmFcwuSObNMVvmHhwX7JdUZFmNNQzbU+PHOEhf/EPItdz431dW3BrOzwcNZ5ZvN8za4=
+    secure: Vm7ChQT2uvsJDBOz7QojlSNArLo332GvtWPEKvJRb6fS2URXPZ7KVEX/cYUjqmjXwiwoBswfzANTkQFGXwEOt8B1KL4ztOc708w1uhi9+5bENXnPTRuF+Y9nR0MxFfrYO+HG+G5d7nyZcogGnMcIE/0LhJvvnsxRoOb18ge73ZQBQoESasAfTnYFmfvRCtnheJoFyE6xD7iFU4Kh9hoHb6vhyYd2aP8KpLh5dKZczRZ/fdQclf0fzHVbERH5HYXN8afzgoreBGOtT3AN75hrGe6W42VXNB5gbHmMAdbhWbWjIv+8uVocUG6Zh6jZJRp8DxcjKTnZV+5h1sa0cbtBNkyn/6jQhDqa4m9qrH4FVRIikPp2jyLDKUxKC423l6G+TYXlm6ppT6OtKId1uqDpT8ebV3YEMlrLUJjc2sELGM0L5R1bAkCRLdZd5byCDVE9qTE/HrW5r+KCiq69nCrCAM505HejugDKeAYFFdiv2iMBqVZGweSrzkg7YfAd3AIt2XLpSOL+IaLyfM/NPs0vmLYZIW75oNzsjWeebk7yqh0ZQ/sHGY+Ur0pLibyRto+ix+d7v0byHHjwziNP3IfjWFbKuiLjAvZcXyUXGmELgSrR8lLmeEpo670jqhyLhos9NGjyJSxc3AzOvQ1toO45YUHT7BQYKdZPFg3+dDXXpWY=
+  file: ''
+  on:
+    tags: true
+  skip_cleanup: true
