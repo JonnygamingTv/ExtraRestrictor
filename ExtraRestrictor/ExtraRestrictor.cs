@@ -111,12 +111,12 @@ namespace ExtraConcentratedJuice.ExtraRestrictor
             if ((player.IsAdmin && Configuration.Instance.IgnoreAdmins) || player.GetPermissions().Any(x => x.Name == "extrarestrictor.bypass"))
                 return;
 
-            RestrictedItem item = Configuration.Instance.Restricted.FirstOrDefault(x => x.Id == P.item.id);
+            RestrictedItem item = Configuration.Instance.Restricted.FirstOrDefault(x => x.Id == itemData.item.id);
 
             if (item != null && !player.GetPermissions().Any(x => x.Name == item.Bypass))
             {
                 shouldAllow = false;
-                UnturnedChat.Say(player, Util.Translate("item_restricted", Assets.find(EAssetType.ITEM, P.item.id).name, P.item.id), Color.red);
+                UnturnedChat.Say(player, Util.Translate("item_restricted", Assets.find(EAssetType.ITEM, itemData.item.id).name, itemData.item.id), Color.red);
             }
         }
 
