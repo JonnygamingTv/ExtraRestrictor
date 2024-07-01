@@ -24,6 +24,7 @@ namespace ExtraConcentratedJuice.ExtraRestrictor
 
             UnturnedPlayerEvents.OnPlayerInventoryAdded += OnInventoryUpdated;
             UnturnedPlayerEvents.OnPlayerWear += OnWear;
+            ItemManager.onTakeItemRequested += TakeItemRequestHandler;
 
             Logger.Log("ExtraRestrictor Loaded!");
             Logger.Log("Users with the permission extrarestrictor.bypass will bypass restrictions.");
@@ -42,6 +43,7 @@ namespace ExtraConcentratedJuice.ExtraRestrictor
         {
             UnturnedPlayerEvents.OnPlayerInventoryAdded -= OnInventoryUpdated;
             UnturnedPlayerEvents.OnPlayerWear -= OnWear;
+            ItemManager.onTakeItemRequested -= TakeItemRequestHandler;
         }
 
         private void OnInventoryUpdated(UnturnedPlayer player, InventoryGroup inventoryGroup, byte inventoryIndex, ItemJar P)
@@ -101,6 +103,20 @@ namespace ExtraConcentratedJuice.ExtraRestrictor
                         break;
                     #endregion
                 }
+            }
+        }
+        private void TakeItemRequestHandler(Player _player, byte _x, byte _y, uint instanceID, byte to_x, byte to_y, byte to_rot, byte to_page, ItemData itemData, ref bool shouldAllow)
+        {
+            UnturnedPlayer player = UnturnedPlayer.FromPlayer(_player);
+            if ((player.IsAdmin && Configuration.Instance.IgnoreAdmins) || player.GetPermissions().Any(x => x.Name == "extrarestrictor.bypass"))
+                return;
+
+            RestrictedItem item = Configuration.Instance.Restricted.FirstOrDefault(x => x.Id == P.item.id);
+
+            if (item != null && !player.GetPermissions().Any(x => x.Name == item.Bypass))
+            {
+                shouldAllow = false;
+                UnturnedChat.Say(player, Util.Translate("item_restricted", Assets.find(EAssetType.ITEM, P.item.id).name, P.item.id), Color.red);
             }
         }
 
