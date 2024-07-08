@@ -48,12 +48,12 @@ namespace ExtraConcentratedJuice.ExtraRestrictor
 
         private void OnInventoryUpdated(UnturnedPlayer player, InventoryGroup inventoryGroup, byte inventoryIndex, ItemJar P)
         {
-            if ((player.IsAdmin && Configuration.Instance.IgnoreAdmins) || player.GetPermissions().Any(x => x.Name == "extrarestrictor.bypass"))
+            if ((player.IsAdmin && Configuration.Instance.IgnoreAdmins) || player.HasPermission("extrarestrictor.bypass"))
                 return;
 
             RestrictedItem item = Configuration.Instance.Restricted.FirstOrDefault(x => x.Id == P.item.id);
 
-            if (item != null && !player.GetPermissions().Any(x => x.Name == item.Bypass))
+            if (item != null && !player.HasPermission(item.Bypass))
             {
                 player.Inventory.removeItem((byte)inventoryGroup, inventoryIndex);
                 UnturnedChat.Say(player, Util.Translate("item_restricted", Assets.find(EAssetType.ITEM, P.item.id).name, P.item.id), Color.red);
@@ -62,12 +62,12 @@ namespace ExtraConcentratedJuice.ExtraRestrictor
 
         private void OnWear(UnturnedPlayer player, UnturnedPlayerEvents.Wearables wear, ushort id, byte? quality)
         {
-            if ((player.IsAdmin && Configuration.Instance.IgnoreAdmins) || player.GetPermissions().Any(x => x.Name == "extrarestrictor.bypass"))
+            if ((player.IsAdmin && Configuration.Instance.IgnoreAdmins) || player.HasPermission("extrarestrictor.bypass"))
                 return;
 
             RestrictedItem item = Configuration.Instance.Restricted.FirstOrDefault(x => x.Id == id);
 
-            if (item != null && !player.GetPermissions().Any(x => x.Name == item.Bypass))
+            if (item != null && !player.HasPermission(item.Bypass))
             {
                 // Gotta wait until the next frame for the item to be removed
                 switch (wear)
@@ -108,12 +108,12 @@ namespace ExtraConcentratedJuice.ExtraRestrictor
         private void TakeItemRequestHandler(Player _player, byte _x, byte _y, uint instanceID, byte to_x, byte to_y, byte to_rot, byte to_page, ItemData itemData, ref bool shouldAllow)
         {
             UnturnedPlayer player = UnturnedPlayer.FromPlayer(_player);
-            if ((player.IsAdmin && Configuration.Instance.IgnoreAdmins) || player.GetPermissions().Any(x => x.Name == "extrarestrictor.bypass"))
+            if ((player.IsAdmin && Configuration.Instance.IgnoreAdmins) || player.HasPermission("extrarestrictor.bypass"))
                 return;
 
             RestrictedItem item = Configuration.Instance.Restricted.FirstOrDefault(x => x.Id == itemData.item.id);
 
-            if (item != null && !player.GetPermissions().Any(x => x.Name == item.Bypass))
+            if (item != null && !player.HasPermission(item.Bypass))
             {
                 shouldAllow = false;
                 UnturnedChat.Say(player, Util.Translate("item_restricted", Assets.find(EAssetType.ITEM, itemData.item.id).name, itemData.item.id), Color.red);
