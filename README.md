@@ -11,6 +11,12 @@ Item restriction plugin loosely based off of LeeIzAZombie's ItemRestrictions, bu
   <Restricted>
     <Item BypassPermission="bypass.permission">ItemID</Item>
   </Restricted>
+  <RestrictedCrafting>
+    <Item BypassPermission="bypass.crafta">519</Item>
+  </RestrictedCrafting>
+  <RestrictedVehicleEnter>
+    <Vehicle BypassPermission="bypass.police">33</Vehicle>
+  </RestrictedVehicleEnter>
   <IgnoreAdmins>true</IgnoreAdmins>
 </ExtraRestrictorConfiguration>
 ```
