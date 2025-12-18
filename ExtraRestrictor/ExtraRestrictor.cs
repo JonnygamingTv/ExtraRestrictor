@@ -190,7 +190,7 @@ namespace ExtraConcentratedJuice.ExtraRestrictor
             if (!player.HasPermission(bypass))
             {
                 shouldAllow = false;
-                UnturnedChat.Say(player, Util.Translate("vehicle_restricted", Assets.find(EAssetType.ITEM, vehicle.id).name, vehicle.id), Color.red);
+                UnturnedChat.Say(player, Util.Translate("vehicle_restricted", Assets.find(EAssetType.VEHICLE, vehicle.id).name, vehicle.id), Color.red);
             }
         }
 
