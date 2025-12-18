@@ -108,7 +108,7 @@ namespace ExtraConcentratedJuice.ExtraRestrictor
 
             if(!player.HasPermission(bypass))
             {
-                player.Inventory.removeItem((byte)inventoryGroup, inventoryIndex);
+                player.Inventory.askDropItem(player.CSteamID, (byte)inventoryGroup, P.x, P.y);
                 UnturnedChat.Say(player, Util.Translate("item_restricted", Assets.find(EAssetType.ITEM, P.item.id).name, P.item.id), Color.red);
             }
         }
