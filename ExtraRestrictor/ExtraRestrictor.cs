@@ -27,11 +27,38 @@ namespace ExtraConcentratedJuice.ExtraRestrictor
             Instance = this;
             
             RestrictItems = Configuration.Instance.Restricted
-                .ToDictionary(x => x.Id, x => x.Bypass);
+                    .GroupBy(x => x.Id)
+                    .ToDictionary(g => g.Key,
+                    g =>
+                    {
+                        if (g.Count() > 1)
+                        {
+                            Logger.LogWarning("Duplicate restricted item ID " + g.Key + " found. Using last entry.");
+                        }
+                        return g.Last().Bypass;
+                    });
             RestrictCraft = Configuration.Instance.RestrictedCrafting
-                .ToDictionary(x => x.Id, x => x.Bypass);
+                    .GroupBy(x => x.Id)
+                    .ToDictionary(g => g.Key,
+                    g =>
+                    {
+                        if (g.Count() > 1)
+                        {
+                            Logger.LogWarning("Duplicate restricted craft ID " + g.Key + " found. Using last entry.");
+                        }
+                        return g.Last().Bypass;
+                    });
             RestrictVehicle = Configuration.Instance.RestrictedVehicleEnter
-                .ToDictionary(x => x.Id, x => x.Bypass);
+                    .GroupBy(x => x.Id)
+                    .ToDictionary(g => g.Key,
+                    g =>
+                    {
+                        if (g.Count() > 1)
+                        {
+                            Logger.LogWarning("Duplicate restricted vehicle ID " + g.Key + " found. Using last entry.");
+                        }
+                        return g.Last().Bypass;
+                    });
 
             if (RestrictItems.Count > 0)
             {
