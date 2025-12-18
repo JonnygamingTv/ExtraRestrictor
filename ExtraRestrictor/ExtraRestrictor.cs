@@ -144,7 +144,7 @@ namespace ExtraConcentratedJuice.ExtraRestrictor
         private void OnCraft(PlayerCrafting crafting, ref ushort itemID, ref byte blueprintIndex, ref bool shouldAllow)
         {
             UnturnedPlayer player = UnturnedPlayer.FromPlayer(crafting.player);
-            if ((player.IsAdmin && Configuration.Instance.IgnoreAdmins) || !RestrictItems.TryGetValue(itemID, out string bypass) || player.HasPermission("extrarestrictor.bypass"))
+            if ((player.IsAdmin && Configuration.Instance.IgnoreAdmins) || !RestrictCraft.TryGetValue(itemID, out string bypass) || player.HasPermission("extrarestrictor.bypass"))
                 return;
 
             if (!player.HasPermission(bypass))
