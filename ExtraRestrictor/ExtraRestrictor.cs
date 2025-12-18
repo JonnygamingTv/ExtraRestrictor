@@ -11,26 +11,50 @@ using Rocket.API;
 using System.Collections;
 using Logger = Rocket.Core.Logging.Logger;
 using System;
+using System.Collections.Generic;
 
 namespace ExtraConcentratedJuice.ExtraRestrictor
 {
     public class ExtraRestrictor : RocketPlugin<ExtraRestrictorConfiguration>
     {
         public static ExtraRestrictor Instance { get; private set; }
+        private Dictionary<ushort, string> RestrictItems;
+        private Dictionary<ushort, string> RestrictCraft;
+        private Dictionary<ushort, string> RestrictVehicle;
 
         protected override void Load()
         {
             Instance = this;
+            
+            RestrictItems = Configuration.Instance.Restricted
+                .ToDictionary(x => x.Id, x => x.Bypass);
+            RestrictCraft = Configuration.Instance.RestrictedCrafting
+                .ToDictionary(x => x.Id, x => x.Bypass);
+            RestrictVehicle = Configuration.Instance.RestrictedVehicleEnter
+                .ToDictionary(x => x.Id, x => x.Bypass);
 
-            UnturnedPlayerEvents.OnPlayerInventoryAdded += OnInventoryUpdated;
-            UnturnedPlayerEvents.OnPlayerWear += OnWear;
-            ItemManager.onTakeItemRequested += TakeItemRequestHandler;
+            if (RestrictItems.Count > 0)
+            {
+                UnturnedPlayerEvents.OnPlayerInventoryAdded += OnInventoryUpdated;
+                UnturnedPlayerEvents.OnPlayerWear += OnWear;
+                ItemManager.onTakeItemRequested += TakeItemRequestHandler;
+            }
+            if(RestrictCraft.Count > 0)
+            {
+                PlayerCrafting.onCraftBlueprintRequested += OnCraft;
+            }
+            if (RestrictVehicle.Count > 0)
+            {
+                VehicleManager.onEnterVehicleRequested += OnEnterVehicle;
+            }
 
             Logger.Log("ExtraRestrictor Loaded!");
             Logger.Log("Users with the permission extrarestrictor.bypass will bypass restrictions.");
             Logger.Log($"Ignore admins: {Configuration.Instance.IgnoreAdmins}");
             Logger.Log("==============");
-            Logger.Log("Restricted items:");
+            Logger.Log("Restricted vehicles: " + RestrictVehicle.Count.ToString());
+            Logger.Log("Restricted crafting: " + RestrictCraft.Count.ToString());
+            Logger.Log("Restricted items: " + RestrictItems.Count.ToString());
 
             foreach (var item in Configuration.Instance.Restricted
                 .Select(x => $"ID: {x.Id} | Name: {Assets.find(EAssetType.ITEM, x.Id)?.name ?? "> INVALID ID <"} | Bypass: {(x.Bypass ?? "None")}"))
@@ -44,16 +68,18 @@ namespace ExtraConcentratedJuice.ExtraRestrictor
             UnturnedPlayerEvents.OnPlayerInventoryAdded -= OnInventoryUpdated;
             UnturnedPlayerEvents.OnPlayerWear -= OnWear;
             ItemManager.onTakeItemRequested -= TakeItemRequestHandler;
+            VehicleManager.onEnterVehicleRequested -= OnEnterVehicle;
+            PlayerCrafting.onCraftBlueprintRequested -= OnCraft;
+
+            Logger.Log("ExtraRestrictor unloaded!");
         }
 
         private void OnInventoryUpdated(UnturnedPlayer player, InventoryGroup inventoryGroup, byte inventoryIndex, ItemJar P)
         {
-            if ((player.IsAdmin && Configuration.Instance.IgnoreAdmins) || player.HasPermission("extrarestrictor.bypass"))
+            if ((player.IsAdmin && Configuration.Instance.IgnoreAdmins) || !RestrictItems.TryGetValue(P.item.id, out string bypass) || player.HasPermission("extrarestrictor.bypass"))
                 return;
 
-            RestrictedItem item = Configuration.Instance.Restricted.FirstOrDefault(x => x.Id == P.item.id);
-
-            if (item != null && !player.HasPermission(item.Bypass))
+            if(!player.HasPermission(bypass))
             {
                 player.Inventory.removeItem((byte)inventoryGroup, inventoryIndex);
                 UnturnedChat.Say(player, Util.Translate("item_restricted", Assets.find(EAssetType.ITEM, P.item.id).name, P.item.id), Color.red);
@@ -62,12 +88,10 @@ namespace ExtraConcentratedJuice.ExtraRestrictor
 
         private void OnWear(UnturnedPlayer player, UnturnedPlayerEvents.Wearables wear, ushort id, byte? quality)
         {
-            if ((player.IsAdmin && Configuration.Instance.IgnoreAdmins) || player.HasPermission("extrarestrictor.bypass"))
+            if ((player.IsAdmin && Configuration.Instance.IgnoreAdmins) || !RestrictItems.TryGetValue(id, out string bypass) || player.HasPermission("extrarestrictor.bypass"))
                 return;
 
-            RestrictedItem item = Configuration.Instance.Restricted.FirstOrDefault(x => x.Id == id);
-
-            if (item != null && !player.HasPermission(item.Bypass))
+            if(!player.HasPermission(bypass))
             {
                 // Gotta wait until the next frame for the item to be removed
                 switch (wear)
@@ -108,15 +132,38 @@ namespace ExtraConcentratedJuice.ExtraRestrictor
         private void TakeItemRequestHandler(Player _player, byte _x, byte _y, uint instanceID, byte to_x, byte to_y, byte to_rot, byte to_page, ItemData itemData, ref bool shouldAllow)
         {
             UnturnedPlayer player = UnturnedPlayer.FromPlayer(_player);
-            if ((player.IsAdmin && Configuration.Instance.IgnoreAdmins) || player.HasPermission("extrarestrictor.bypass"))
+            if ((player.IsAdmin && Configuration.Instance.IgnoreAdmins) || !RestrictItems.TryGetValue(itemData.item.id, out string bypass) || player.HasPermission("extrarestrictor.bypass"))
                 return;
 
-            RestrictedItem item = Configuration.Instance.Restricted.FirstOrDefault(x => x.Id == itemData.item.id);
-
-            if (item != null && !player.HasPermission(item.Bypass))
+            if (!player.HasPermission(bypass))
             {
                 shouldAllow = false;
                 UnturnedChat.Say(player, Util.Translate("item_restricted", Assets.find(EAssetType.ITEM, itemData.item.id).name, itemData.item.id), Color.red);
+            }
+        }
+        private void OnCraft(PlayerCrafting crafting, ref ushort itemID, ref byte blueprintIndex, ref bool shouldAllow)
+        {
+            UnturnedPlayer player = UnturnedPlayer.FromPlayer(crafting.player);
+            if ((player.IsAdmin && Configuration.Instance.IgnoreAdmins) || !RestrictItems.TryGetValue(itemID, out string bypass) || player.HasPermission("extrarestrictor.bypass"))
+                return;
+
+            if (!player.HasPermission(bypass))
+            {
+                shouldAllow = false;
+                UnturnedChat.Say(player, Util.Translate("item_restricted", Assets.find(EAssetType.ITEM, itemID).name, itemID), Color.red);
+            }
+        }
+
+        private void OnEnterVehicle(Player pl, InteractableVehicle vehicle, ref bool shouldAllow)
+        {
+            UnturnedPlayer player = UnturnedPlayer.FromPlayer(pl);
+            if ((player.IsAdmin && Configuration.Instance.IgnoreAdmins) || !RestrictVehicle.TryGetValue(vehicle.id, out string bypass) || player.HasPermission("extrarestrictor.bypass"))
+                return;
+
+            if (!player.HasPermission(bypass))
+            {
+                shouldAllow = false;
+                UnturnedChat.Say(player, Util.Translate("vehicle_restricted", Assets.find(EAssetType.ITEM, vehicle.id).name, vehicle.id), Color.red);
             }
         }
 
@@ -129,7 +176,8 @@ namespace ExtraConcentratedJuice.ExtraRestrictor
         public override TranslationList DefaultTranslations =>
             new TranslationList
             {
-                { "item_restricted", "You do not have access to this restricted item. ({0}, {1})" }
+                { "item_restricted", "You do not have access to this restricted item. ({0}, {1})" },
+                { "vehicle_restricted", "You do not have access to this restricted vehicle. ({0}, {1})" }
             };
     }
 }

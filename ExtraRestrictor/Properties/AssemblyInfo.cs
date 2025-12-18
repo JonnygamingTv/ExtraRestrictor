@@ -6,12 +6,12 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("ExtraRestrictor")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Unturned RocketMod plugin for permission-based item, crafting and vehicle restrictions.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Microsoft")]
+[assembly: AssemblyCompany("JonHosting")]
 [assembly: AssemblyProduct("ExtraRestrictor")]
-[assembly: AssemblyCopyright("Copyright © Microsoft 2018")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCopyright("Copyright © Sam Hocevar 2004, JonHosting 2025")]
+[assembly: AssemblyTrademark("JonHosting")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible
